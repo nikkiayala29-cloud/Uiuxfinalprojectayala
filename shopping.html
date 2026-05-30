@@ -1,1 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Shopping List</title>
+</head>
+<body>
 
+<h1>🛒 Shopping List</h1>
+
+<input id="item">
+<button onclick="add()">Add</button>
+
+<div id="list"></div>
+
+<script>
+function add() {
+  let item = document.getElementById("item").value;
+  let list = JSON.parse(localStorage.getItem("shop")) || [];
+  list.push(item);
+  localStorage.setItem("shop", JSON.stringify(list));
+  show();
+}
+
+function show() {
+  let list = JSON.parse(localStorage.getItem("shop")) || [];
+  document.getElementById("list").innerHTML =
+    list.map(i => `<p>🛒 ${i}</p>`).join('');
+}
+show();
+</script>
+
+</body>
+</html>
