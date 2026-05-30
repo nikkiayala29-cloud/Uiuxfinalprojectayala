@@ -1,1 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Planner</title>
+</head>
+<body>
 
+<h1>📅 Meal Planner</h1>
+
+<input id="meal">
+<button onclick="save()">Save Meal</button>
+
+<div id="out"></div>
+
+<script>
+function save() {
+  let meal = document.getElementById("meal").value;
+  localStorage.setItem("meal", meal);
+  show();
+}
+
+function show() {
+  let meal = localStorage.getItem("meal");
+  document.getElementById("out").innerHTML =
+    meal ? "Today: " + meal : "No meal set";
+}
+show();
+</script>
+
+</body>
+</html>
