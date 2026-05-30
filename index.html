@@ -1,115 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RecipeHub</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RecipeHub App</title>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f7f7f7;
-    }
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #f5f5f5;
+}
 
-    header {
-      background: #ff6b6b;
-      color: white;
-      padding: 20px;
-      text-align: center;
-      font-size: 22px;
-      font-weight: bold;
-    }
+header {
+  background: #ff6b6b;
+  color: white;
+  padding: 20px;
+  font-size: 22px;
+  text-align: center;
+}
 
-    .search {
-      padding: 15px;
-    }
+.search {
+  padding: 15px;
+}
 
-    .search input {
-      width: 100%;
-      padding: 12px;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-    }
+.search input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      padding: 15px;
-    }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  padding: 15px;
+}
 
-    .card {
-      background: white;
-      border-radius: 15px;
-      padding: 10px;
-      text-align: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
+.card {
+  background: white;
+  padding: 10px;
+  border-radius: 15px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  cursor: pointer;
+}
 
-    .card img {
-      width: 100%;
-      border-radius: 10px;
-    }
+.card img {
+  width: 100%;
+  border-radius: 10px;
+}
 
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      background: white;
-      display: flex;
-      justify-content: space-around;
-      padding: 10px;
-      border-top: 1px solid #ddd;
-    }
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  background: white;
+  padding: 10px;
+  border-top: 1px solid #ddd;
+}
 
-    .bottom-nav a {
-      text-decoration: none;
-      color: #333;
-      font-size: 14px;
-    }
-  </style>
+.bottom-nav a {
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+}
+</style>
 </head>
 
 <body>
 
-  <header>
-    🍽 RecipeHub
-  </header>
+<header>🍽 RecipeHub</header>
 
-  <div class="search">
-    <input type="text" placeholder="Search recipes...">
+<div class="search">
+  <input type="text" placeholder="Search recipes...">
+</div>
+
+<div class="grid">
+
+  <div class="card" onclick="addFav('Pasta')">
+    <img src="https://via.placeholder.com/150">
+    <p>Pasta</p>
   </div>
 
-  <div class="grid">
-    <div class="card">
-      <img src="https://via.placeholder.com/150">
-      <p>Pasta</p>
-    </div>
-
-    <div class="card">
-      <img src="https://via.placeholder.com/150">
-      <p>Burger</p>
-    </div>
-
-    <div class="card">
-      <img src="https://via.placeholder.com/150">
-      <p>Salad</p>
-    </div>
-
-    <div class="card">
-      <img src="https://via.placeholder.com/150">
-      <p>Chicken</p>
-    </div>
+  <div class="card" onclick="addFav('Burger')">
+    <img src="https://via.placeholder.com/150">
+    <p>Burger</p>
   </div>
 
-  <div class="bottom-nav">
-    <a href="#">Home</a>
-    <a href="#">Recipes</a>
-    <a href="#">Favorites</a>
-    <a href="#">Planner</a>
-    <a href="#">List</a>
+  <div class="card" onclick="addFav('Salad')">
+    <img src="https://via.placeholder.com/150">
+    <p>Salad</p>
   </div>
+
+  <div class="card" onclick="addFav('Chicken')">
+    <img src="https://via.placeholder.com/150">
+    <p>Chicken</p>
+  </div>
+
+</div>
+
+<div class="bottom-nav">
+  <a href="index.html">Home</a>
+  <a href="favorites.html">Favorites</a>
+  <a href="planner.html">Planner</a>
+  <a href="shopping.html">List</a>
+</div>
+
+<script>
+function addFav(item) {
+  let favs = JSON.parse(localStorage.getItem("favs")) || [];
+  favs.push(item);
+  localStorage.setItem("favs", JSON.stringify(favs));
+  alert(item + " added to favorites!");
+}
+</script>
 
 </body>
 </html>
