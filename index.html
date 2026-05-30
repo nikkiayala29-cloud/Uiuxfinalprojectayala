@@ -9,24 +9,22 @@
 body {
   margin: 0;
   font-family: Arial;
-  background: #e9eef3;
+  background: #eef1f5;
 }
 
-/* APP FRAME */
+/* APP */
 .app {
   max-width: 420px;
   margin: auto;
   background: white;
   min-height: 100vh;
-  position: relative;
-  overflow: hidden;
 }
 
 /* HEADER */
 header {
   background: linear-gradient(135deg,#ff6b6b,#ff8e53);
   color: white;
-  padding: 18px;
+  padding: 20px;
   font-size: 20px;
   font-weight: bold;
 }
@@ -40,23 +38,7 @@ header {
   padding: 12px;
   border-radius: 12px;
   border: none;
-  background: #f3f3f3;
-}
-
-/* CATEGORIES */
-.categories {
-  display: flex;
-  overflow-x: auto;
-  gap: 10px;
-  padding: 10px;
-}
-.cat {
-  background: #ff6b6b;
-  color: white;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-  white-space: nowrap;
+  background: #f2f2f2;
 }
 
 /* GRID */
@@ -71,7 +53,6 @@ header {
   border-radius: 15px;
   overflow: hidden;
   box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-  cursor: pointer;
 }
 
 .card img {
@@ -85,12 +66,22 @@ header {
   font-weight: bold;
 }
 
-/* BOTTOM NAV */
+/* DETAIL */
+.detail {
+  display: none;
+  padding: 15px;
+}
+
+.detail img {
+  width: 100%;
+  border-radius: 15px;
+}
+
+/* NAV */
 .nav {
   position: fixed;
   bottom: 0;
-  left: 0;
-  right: 0;
+  width: 100%;
   max-width: 420px;
   margin: auto;
   display: flex;
@@ -99,43 +90,12 @@ header {
   padding: 10px;
   border-top: 1px solid #ddd;
 }
-
-.nav button {
-  border: none;
-  background: none;
-  font-size: 12px;
-}
-
-/* MODAL (RECIPE DETAILS) */
-.modal {
-  position: fixed;
-  bottom: -100%;
-  left: 0;
-  right: 0;
-  background: white;
-  max-width: 420px;
-  margin: auto;
-  padding: 20px;
-  border-radius: 20px 20px 0 0;
-  box-shadow: 0 -5px 20px rgba(0,0,0,0.2);
-  transition: 0.3s;
-}
-
-.modal.show {
-  bottom: 0;
-}
-
-/* DARK MODE */
-.dark {
-  background: #121212;
-  color: white;
-}
 </style>
 </head>
 
 <body>
 
-<div class="app" id="app">
+<div class="app">
 
 <header>🍽 RecipeHub</header>
 
@@ -143,86 +103,98 @@ header {
   <input placeholder="Search recipes...">
 </div>
 
-<div class="categories">
-  <div class="cat">Breakfast</div>
-  <div class="cat">Lunch</div>
-  <div class="cat">Dinner</div>
-  <div class="cat">Dessert</div>
-</div>
-
+<!-- GRID -->
 <div class="grid">
 
-  <div class="card" onclick="openRecipe('Pasta')">
-    <img src="https://source.unsplash.com/300x200/?pasta">
-    <p>Pasta</p>
-  </div>
-
-  <div class="card" onclick="openRecipe('Burger')">
-    <img src="https://source.unsplash.com/300x200/?burger">
-    <p>Burger</p>
-  </div>
-
-  <div class="card" onclick="openRecipe('Salad')">
-    <img src="https://source.unsplash.com/300x200/?salad">
-    <p>Salad</p>
-  </div>
-
-  <div class="card" onclick="openRecipe('Chicken')">
+  <div class="card" onclick="openRecipe('adobo')">
     <img src="https://source.unsplash.com/300x200/?chicken">
-    <p>Chicken</p>
+    <p>Chicken Adobo</p>
+  </div>
+
+  <div class="card" onclick="openRecipe('sinigang')">
+    <img src="https://source.unsplash.com/300x200/?soup">
+    <p>Sinigang</p>
+  </div>
+
+  <div class="card" onclick="openRecipe('pancit')">
+    <img src="https://source.unsplash.com/300x200/?noodles">
+    <p>Pancit Bihon</p>
+  </div>
+
+  <div class="card" onclick="openRecipe('leche')">
+    <img src="https://source.unsplash.com/300x200/?dessert">
+    <p>Leche Flan</p>
   </div>
 
 </div>
 
-</div>
+<!-- DETAIL VIEW -->
+<div class="detail" id="detail">
 
-<!-- MODAL -->
-<div class="modal" id="modal">
+  <img id="img">
+
   <h2 id="title"></h2>
-  <p>Delicious recipe details coming soon...</p>
-  <button onclick="addFav()">❤️ Add to Favorites</button>
-  <button onclick="closeModal()">Close</button>
+
+  <h3>Ingredients</h3>
+  <p id="ingredients"></p>
+
+  <h3>Instructions</h3>
+  <p id="instructions"></p>
+
+  <h3>Nutrition</h3>
+  <p id="nutrition"></p>
+
+  <button onclick="closeRecipe()">Back</button>
 </div>
 
-<!-- NAV -->
-<div class="nav">
-  <button onclick="toggleDark()">🌙</button>
-  <button onclick="showFav()">❤️</button>
-  <button onclick="showMsg()">📅</button>
-  <button onclick="showMsg()">🛒</button>
 </div>
 
 <script>
-let current = "";
+const recipes = {
+  adobo: {
+    title: "Chicken Adobo",
+    ingredients: "Chicken, soy sauce, vinegar, garlic, bay leaf",
+    instructions: "Marinate chicken, simmer until tender.",
+    nutrition: "Protein high, 320 kcal",
+    img: "https://source.unsplash.com/300x200/?chicken"
+  },
+  sinigang: {
+    title: "Sinigang na Baboy",
+    ingredients: "Pork, tamarind, vegetables",
+    instructions: "Boil pork, add tamarind soup base.",
+    nutrition: "Balanced meal, 280 kcal",
+    img: "https://source.unsplash.com/300x200/?soup"
+  },
+  pancit: {
+    title: "Pancit Bihon",
+    ingredients: "Rice noodles, vegetables, chicken",
+    instructions: "Stir-fry noodles with ingredients.",
+    nutrition: "Carbs high, 300 kcal",
+    img: "https://source.unsplash.com/300x200/?noodles"
+  },
+  leche: {
+    title: "Leche Flan",
+    ingredients: "Eggs, milk, sugar",
+    instructions: "Steam custard mixture.",
+    nutrition: "Sweet dessert, 250 kcal",
+    img: "https://source.unsplash.com/300x200/?dessert"
+  }
+};
 
-function openRecipe(name){
-  current = name;
-  document.getElementById("title").innerText = name;
-  document.getElementById("modal").classList.add("show");
+function openRecipe(id){
+  document.getElementById("detail").style.display = "block";
+  document.querySelector(".grid").style.display = "none";
+
+  document.getElementById("title").innerText = recipes[id].title;
+  document.getElementById("ingredients").innerText = recipes[id].ingredients;
+  document.getElementById("instructions").innerText = recipes[id].instructions;
+  document.getElementById("nutrition").innerText = recipes[id].nutrition;
+  document.getElementById("img").src = recipes[id].img;
 }
 
-function closeModal(){
-  document.getElementById("modal").classList.remove("show");
-}
-
-function addFav(){
-  let favs = JSON.parse(localStorage.getItem("favs")) || [];
-  favs.push(current);
-  localStorage.setItem("favs", JSON.stringify(favs));
-  alert("Added to favorites!");
-}
-
-function toggleDark(){
-  document.getElementById("app").classList.toggle("dark");
-}
-
-function showFav(){
-  let favs = JSON.parse(localStorage.getItem("favs")) || [];
-  alert("Favorites: " + favs.join(", "));
-}
-
-function showMsg(){
-  alert("Feature coming soon in prototype demo");
+function closeRecipe(){
+  document.getElementById("detail").style.display = "none";
+  document.querySelector(".grid").style.display = "grid";
 }
 </script>
 
