@@ -8,60 +8,58 @@
 <style>
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #eef1f5;
+  font-family: Arial;
+  background: #e9eef3;
 }
 
-/* PHONE APP CONTAINER */
+/* APP FRAME */
 .app {
   max-width: 420px;
   margin: auto;
   background: white;
   min-height: 100vh;
-  box-shadow: 0 0 20px rgba(0,0,0,0.1);
   position: relative;
+  overflow: hidden;
 }
 
 /* HEADER */
 header {
-  background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+  background: linear-gradient(135deg,#ff6b6b,#ff8e53);
   color: white;
-  padding: 20px;
+  padding: 18px;
   font-size: 20px;
   font-weight: bold;
 }
 
-/* SEARCH BAR */
+/* SEARCH */
 .search {
-  padding: 15px;
+  padding: 10px 15px;
 }
-
 .search input {
   width: 100%;
   padding: 12px;
   border-radius: 12px;
   border: none;
-  background: #f2f2f2;
+  background: #f3f3f3;
 }
 
-/* CATEGORY SCROLL */
+/* CATEGORIES */
 .categories {
   display: flex;
   overflow-x: auto;
-  padding: 10px;
   gap: 10px;
+  padding: 10px;
 }
-
 .cat {
   background: #ff6b6b;
   color: white;
-  padding: 8px 12px;
+  padding: 6px 12px;
   border-radius: 20px;
+  font-size: 12px;
   white-space: nowrap;
-  font-size: 13px;
 }
 
-/* RECIPE CARDS */
+/* GRID */
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -70,61 +68,79 @@ header {
 }
 
 .card {
-  background: white;
   border-radius: 15px;
   overflow: hidden;
   box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-  transition: 0.2s;
-}
-
-.card:active {
-  transform: scale(0.97);
+  cursor: pointer;
 }
 
 .card img {
   width: 100%;
-  height: 100px;
+  height: 110px;
   object-fit: cover;
 }
 
 .card p {
   margin: 8px;
-  font-size: 14px;
   font-weight: bold;
 }
 
-/* BOTTOM NAV (MOBILE STYLE) */
+/* BOTTOM NAV */
 .nav {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  background: white;
-  display: flex;
-  justify-content: space-around;
-  padding: 10px;
-  border-top: 1px solid #ddd;
   max-width: 420px;
   margin: auto;
+  display: flex;
+  justify-content: space-around;
+  background: white;
+  padding: 10px;
+  border-top: 1px solid #ddd;
 }
 
-.nav a {
-  text-decoration: none;
+.nav button {
+  border: none;
+  background: none;
   font-size: 12px;
-  color: #333;
-  text-align: center;
+}
+
+/* MODAL (RECIPE DETAILS) */
+.modal {
+  position: fixed;
+  bottom: -100%;
+  left: 0;
+  right: 0;
+  background: white;
+  max-width: 420px;
+  margin: auto;
+  padding: 20px;
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -5px 20px rgba(0,0,0,0.2);
+  transition: 0.3s;
+}
+
+.modal.show {
+  bottom: 0;
+}
+
+/* DARK MODE */
+.dark {
+  background: #121212;
+  color: white;
 }
 </style>
 </head>
 
 <body>
 
-<div class="app">
+<div class="app" id="app">
 
 <header>🍽 RecipeHub</header>
 
 <div class="search">
-  <input type="text" placeholder="Search recipes...">
+  <input placeholder="Search recipes...">
 </div>
 
 <div class="categories">
@@ -136,22 +152,22 @@ header {
 
 <div class="grid">
 
-  <div class="card">
+  <div class="card" onclick="openRecipe('Pasta')">
     <img src="https://source.unsplash.com/300x200/?pasta">
     <p>Pasta</p>
   </div>
 
-  <div class="card">
+  <div class="card" onclick="openRecipe('Burger')">
     <img src="https://source.unsplash.com/300x200/?burger">
     <p>Burger</p>
   </div>
 
-  <div class="card">
+  <div class="card" onclick="openRecipe('Salad')">
     <img src="https://source.unsplash.com/300x200/?salad">
     <p>Salad</p>
   </div>
 
-  <div class="card">
+  <div class="card" onclick="openRecipe('Chicken')">
     <img src="https://source.unsplash.com/300x200/?chicken">
     <p>Chicken</p>
   </div>
@@ -160,14 +176,55 @@ header {
 
 </div>
 
-<!-- BOTTOM NAV -->
-<div class="nav">
-  <a href="index.html">🏠<br>Home</a>
-  <a href="recipes.html">🍲<br>Recipes</a>
-  <a href="favorites.html">❤️<br>Fav</a>
-  <a href="planner.html">📅<br>Plan</a>
-  <a href="shopping.html">🛒<br>List</a>
+<!-- MODAL -->
+<div class="modal" id="modal">
+  <h2 id="title"></h2>
+  <p>Delicious recipe details coming soon...</p>
+  <button onclick="addFav()">❤️ Add to Favorites</button>
+  <button onclick="closeModal()">Close</button>
 </div>
+
+<!-- NAV -->
+<div class="nav">
+  <button onclick="toggleDark()">🌙</button>
+  <button onclick="showFav()">❤️</button>
+  <button onclick="showMsg()">📅</button>
+  <button onclick="showMsg()">🛒</button>
+</div>
+
+<script>
+let current = "";
+
+function openRecipe(name){
+  current = name;
+  document.getElementById("title").innerText = name;
+  document.getElementById("modal").classList.add("show");
+}
+
+function closeModal(){
+  document.getElementById("modal").classList.remove("show");
+}
+
+function addFav(){
+  let favs = JSON.parse(localStorage.getItem("favs")) || [];
+  favs.push(current);
+  localStorage.setItem("favs", JSON.stringify(favs));
+  alert("Added to favorites!");
+}
+
+function toggleDark(){
+  document.getElementById("app").classList.toggle("dark");
+}
+
+function showFav(){
+  let favs = JSON.parse(localStorage.getItem("favs")) || [];
+  alert("Favorites: " + favs.join(", "));
+}
+
+function showMsg(){
+  alert("Feature coming soon in prototype demo");
+}
+</script>
 
 </body>
 </html>
