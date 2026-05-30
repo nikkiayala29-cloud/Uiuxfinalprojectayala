@@ -30,7 +30,6 @@ header {
   padding: 10px;
   border-radius: 10px;
   border: none;
-  background: #f1f1f1;
 }
 
 /* GRID */
@@ -41,12 +40,12 @@ header {
   padding: 10px;
 }
 
-/* CARD */
 .card {
   background: white;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  cursor: pointer;
 }
 
 .card img {
@@ -59,6 +58,27 @@ header {
   margin: 8px;
   font-weight: bold;
 }
+
+/* DETAIL PAGE */
+.detail {
+  display: none;
+  padding: 15px;
+}
+
+.detail img {
+  width: 100%;
+  border-radius: 12px;
+}
+
+/* BUTTON */
+button {
+  background: orange;
+  border: none;
+  padding: 10px;
+  color: white;
+  border-radius: 8px;
+  margin-top: 10px;
+}
 </style>
 
 </head>
@@ -68,32 +88,104 @@ header {
 <header>🍽 RecipeHub</header>
 
 <div class="search">
-  <input type="text" placeholder="Search recipes...">
+  <input placeholder="Search recipes...">
 </div>
 
-<div class="grid">
+<!-- GRID -->
+<div class="grid" id="grid">
 
-  <div class="card">
+  <div class="card" onclick="openRecipe('adobo')">
     <img src="https://source.unsplash.com/300x200/?chicken">
     <p>Chicken Adobo</p>
   </div>
 
-  <div class="card">
+  <div class="card" onclick="openRecipe('sinigang')">
     <img src="https://source.unsplash.com/300x200/?soup">
-    <p>Sinigang na Baboy</p>
+    <p>Sinigang</p>
   </div>
 
-  <div class="card">
+  <div class="card" onclick="openRecipe('pancit')">
     <img src="https://source.unsplash.com/300x200/?noodles">
     <p>Pancit Bihon</p>
   </div>
 
-  <div class="card">
+  <div class="card" onclick="openRecipe('leche')">
     <img src="https://source.unsplash.com/300x200/?dessert">
     <p>Leche Flan</p>
   </div>
 
 </div>
+
+<!-- DETAIL VIEW -->
+<div class="detail" id="detail">
+
+  <img id="img">
+
+  <h2 id="title"></h2>
+
+  <h3>Ingredients</h3>
+  <p id="ingredients"></p>
+
+  <h3>Instructions</h3>
+  <p id="instructions"></p>
+
+  <h3>Nutrition</h3>
+  <p id="nutrition"></p>
+
+  <button onclick="goBack()">⬅ Back</button>
+
+</div>
+
+<script>
+
+const recipes = {
+  adobo: {
+    title: "Chicken Adobo",
+    ingredients: "Chicken, soy sauce, vinegar, garlic",
+    instructions: "Marinate chicken, then simmer until tender.",
+    nutrition: "320 kcal",
+    img: "https://source.unsplash.com/300x200/?chicken"
+  },
+  sinigang: {
+    title: "Sinigang na Baboy",
+    ingredients: "Pork, tamarind, vegetables",
+    instructions: "Boil pork, add sour base, add vegetables.",
+    nutrition: "280 kcal",
+    img: "https://source.unsplash.com/300x200/?soup"
+  },
+  pancit: {
+    title: "Pancit Bihon",
+    ingredients: "Noodles, vegetables, chicken",
+    instructions: "Stir fry noodles with ingredients.",
+    nutrition: "300 kcal",
+    img: "https://source.unsplash.com/300x200/?noodles"
+  },
+  leche: {
+    title: "Leche Flan",
+    ingredients: "Eggs, milk, sugar",
+    instructions: "Steam until caramelized.",
+    nutrition: "250 kcal",
+    img: "https://source.unsplash.com/300x200/?dessert"
+  }
+};
+
+function openRecipe(id){
+  document.getElementById("grid").style.display = "none";
+  document.getElementById("detail").style.display = "block";
+
+  document.getElementById("title").innerText = recipes[id].title;
+  document.getElementById("ingredients").innerText = recipes[id].ingredients;
+  document.getElementById("instructions").innerText = recipes[id].instructions;
+  document.getElementById("nutrition").innerText = recipes[id].nutrition;
+  document.getElementById("img").src = recipes[id].img;
+}
+
+function goBack(){
+  document.getElementById("grid").style.display = "grid";
+  document.getElementById("detail").style.display = "none";
+}
+
+</script>
 
 </body>
 </html>
