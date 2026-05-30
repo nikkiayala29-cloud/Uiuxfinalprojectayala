@@ -1,1 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RecipeHub</title>
 
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+    }
+
+    header {
+      background: #ff6b6b;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .search {
+      padding: 15px;
+    }
+
+    .search input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      padding: 15px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 15px;
+      padding: 10px;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .card img {
+      width: 100%;
+      border-radius: 10px;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: white;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px;
+      border-top: 1px solid #ddd;
+    }
+
+    .bottom-nav a {
+      text-decoration: none;
+      color: #333;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    🍽 RecipeHub
+  </header>
+
+  <div class="search">
+    <input type="text" placeholder="Search recipes...">
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <img src="https://via.placeholder.com/150">
+      <p>Pasta</p>
+    </div>
+
+    <div class="card">
+      <img src="https://via.placeholder.com/150">
+      <p>Burger</p>
+    </div>
+
+    <div class="card">
+      <img src="https://via.placeholder.com/150">
+      <p>Salad</p>
+    </div>
+
+    <div class="card">
+      <img src="https://via.placeholder.com/150">
+      <p>Chicken</p>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <a href="#">Home</a>
+    <a href="#">Recipes</a>
+    <a href="#">Favorites</a>
+    <a href="#">Planner</a>
+    <a href="#">List</a>
+  </div>
+
+</body>
+</html>
