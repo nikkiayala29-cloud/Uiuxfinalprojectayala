@@ -1,1 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Favorites</title>
+</head>
+<body>
 
+<h1>❤️ Favorites</h1>
+
+<div id="list"></div>
+
+<script>
+let favs = JSON.parse(localStorage.getItem("favs")) || [];
+
+document.getElementById("list").innerHTML =
+  favs.map(f => `<p>🍽 ${f}</p>`).join('');
+</script>
+
+</body>
+</html>
