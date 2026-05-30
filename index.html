@@ -1,41 +1,98 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>RecipeHub</title>
+<title>RecipeHub</title>
 
-  <style>
-    body {
-      font-family: Arial;
-      margin: 0;
-      background: #fff7f0;
-    }
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #fff7f0;
+}
 
-    header {
-      background: orange;
-      color: white;
-      padding: 15px;
-      text-align: center;
-    }
+/* HEADER */
+header {
+  background: orange;
+  color: white;
+  padding: 15px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+}
 
-    .card {
-      background: white;
-      margin: 10px;
-      padding: 10px;
-      border-radius: 10px;
-    }
-  </style>
+/* SEARCH */
+.search {
+  padding: 10px;
+}
+
+.search input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: #f1f1f1;
+}
+
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 10px;
+}
+
+/* CARD */
+.card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.card img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+}
+
+.card p {
+  margin: 8px;
+  font-weight: bold;
+}
+</style>
+
 </head>
 
 <body>
 
 <header>🍽 RecipeHub</header>
 
-<div class="card">
-  Chicken Adobo
+<div class="search">
+  <input type="text" placeholder="Search recipes...">
 </div>
 
-<div class="card">
-  Sinigang
+<div class="grid">
+
+  <div class="card">
+    <img src="https://source.unsplash.com/300x200/?chicken">
+    <p>Chicken Adobo</p>
+  </div>
+
+  <div class="card">
+    <img src="https://source.unsplash.com/300x200/?soup">
+    <p>Sinigang na Baboy</p>
+  </div>
+
+  <div class="card">
+    <img src="https://source.unsplash.com/300x200/?noodles">
+    <p>Pancit Bihon</p>
+  </div>
+
+  <div class="card">
+    <img src="https://source.unsplash.com/300x200/?dessert">
+    <p>Leche Flan</p>
+  </div>
+
 </div>
 
 </body>
