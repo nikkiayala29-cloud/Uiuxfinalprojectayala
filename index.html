@@ -6,111 +6,118 @@
 <title>RecipeHub</title>
 
 <style>
-body {
-  margin: 0;
-  font-family: Arial;
-  background: #fff7f0;
+body{
+  margin:0;
+  font-family:Arial;
+  background:#fff7f0;
 }
 
 /* HEADER */
-header {
-  background: #ff6b00;
-  color: white;
-  padding: 15px;
-  text-align: center;
-  font-size: 20px;
-  font-weight: bold;
-  position: relative;
+header{
+  background:#ff6b00;
+  color:white;
+  padding:15px;
+  text-align:center;
+  font-size:20px;
+  font-weight:bold;
+  position:relative;
 }
 
-/* HAMBURGER */
-.menu-btn {
-  position: absolute;
-  left: 15px;
-  top: 15px;
-  font-size: 22px;
-  cursor: pointer;
+.menu-btn{
+  position:absolute;
+  left:15px;
+  top:15px;
+  font-size:22px;
+  cursor:pointer;
 }
 
-/* SIDEBAR MENU */
-.sidebar {
-  position: fixed;
-  left: -220px;
-  top: 0;
-  width: 200px;
-  height: 100%;
-  background: white;
-  box-shadow: 2px 0 10px rgba(0,0,0,0.2);
-  padding: 15px;
-  transition: 0.3s;
+/* SIDEBAR */
+.sidebar{
+  position:fixed;
+  top:0;
+  left:-240px;
+  width:220px;
+  height:100%;
+  background:white;
+  box-shadow:2px 0 10px rgba(0,0,0,0.2);
+  padding:15px;
+  transition:0.3s;
+  z-index:999;
 }
 
-.sidebar a {
-  display: block;
-  padding: 10px;
-  text-decoration: none;
-  color: #333;
+.sidebar a{
+  display:block;
+  padding:12px;
+  text-decoration:none;
+  color:#333;
+  border-bottom:1px solid #eee;
 }
 
 /* SEARCH */
-.search {
-  padding: 10px;
+.search{
+  padding:10px;
 }
 
-.search input {
-  width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: none;
-  background: #f1f1f1;
+.search input{
+  width:100%;
+  padding:12px;
+  border-radius:10px;
+  border:none;
+  background:#f1f1f1;
 }
 
 /* GRID */
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  padding: 10px;
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  padding:10px;
 }
 
-.card {
-  background: white;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  cursor: pointer;
+.card{
+  background:white;
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 2px 8px rgba(0,0,0,0.1);
+  cursor:pointer;
 }
 
-.card img {
-  width: 100%;
-  height: 110px;
-  object-fit: cover;
+.card img{
+  width:100%;
+  height:110px;
+  object-fit:cover;
 }
 
-.card p {
-  margin: 8px;
-  font-weight: bold;
+.card p{
+  margin:8px;
+  font-weight:bold;
+}
+
+.card small{
+  margin:8px;
+  display:block;
+  color:gray;
 }
 
 /* DETAIL */
-.detail {
-  display: none;
-  padding: 15px;
+.detail{
+  display:none;
+  padding:15px;
 }
 
-.detail img {
-  width: 100%;
-  border-radius: 12px;
+.detail img{
+  width:100%;
+  border-radius:12px;
 }
 
 /* BUTTON */
-button {
-  background: #ff6b00;
-  border: none;
-  padding: 10px;
-  color: white;
-  border-radius: 8px;
-  margin-top: 10px;
+button{
+  background:#ff6b00;
+  color:white;
+  border:none;
+  padding:10px;
+  border-radius:8px;
+  margin-top:10px;
 }
 </style>
 </head>
@@ -119,24 +126,22 @@ button {
 
 <header>
   <span class="menu-btn" onclick="toggleMenu()">☰</span>
-  🍽 RecipeHub
+  RecipeHub UI/UX System
 </header>
 
 <!-- SIDEBAR -->
 <div class="sidebar" id="sidebar">
-  <a href="#" onclick="showAll()">🏠 Home</a>
-  <a href="#" onclick="showFavs()">❤️ Favorites</a>
-  <a href="#" onclick="showPlanner()">📅 Meal Planner</a>
-  <a href="#" onclick="showShop()">🛒 Shopping List</a>
+  <a onclick="renderRecipes()">🏠 Home</a>
+  <a onclick="showFav()">❤️ Favorites</a>
 </div>
 
 <!-- SEARCH -->
 <div class="search">
-  <input id="search" onkeyup="searchRecipe()" placeholder="Search recipes...">
+  <input id="search" onkeyup="searchRecipe()" placeholder="Search recipes or category...">
 </div>
 
 <!-- GRID -->
-<div class="grid" id="grid"></div>
+<div class="grid" id="home"></div>
 
 <!-- DETAIL -->
 <div class="detail" id="detail">
@@ -154,40 +159,72 @@ button {
   <p id="nutrition"></p>
 
   <button onclick="addFav()">❤️ Add to Favorites</button>
-  <button onclick="goBack()">⬅ Back</button>
+  <button onclick="back()">⬅ Back</button>
 </div>
 
 <script>
 
 /* =========================
-   DATABASE (EXPANDABLE TO 100+)
+   DATA SYSTEM (SCALABLE)
 ========================= */
 const recipes = [
-  {id:1,name:"Chicken Adobo",image:"https://source.unsplash.com/300x200/?chicken",ingredients:"Chicken, soy sauce, vinegar, garlic",instructions:"Simmer until tender.",nutrition:"320 kcal"},
-  {id:2,name:"Sinigang na Baboy",image:"https://source.unsplash.com/300x200/?soup",ingredients:"Pork, tamarind, vegetables",instructions:"Boil pork, add sour base.",nutrition:"280 kcal"},
-  {id:3,name:"Pancit Bihon",image:"https://source.unsplash.com/300x200/?noodles",ingredients:"Noodles, chicken, vegetables",instructions:"Stir fry ingredients.",nutrition:"300 kcal"},
-  {id:4,name:"Leche Flan",image:"https://source.unsplash.com/300x200/?dessert",ingredients:"Eggs, milk, sugar",instructions:"Steam until set.",nutrition:"250 kcal"}
+  {
+    id:1,
+    name:"Chicken Adobo",
+    category:"Filipino",
+    image:"https://source.unsplash.com/300x200/?chicken",
+    ingredients:["Chicken","Soy sauce","Vinegar","Garlic","Bay leaf"],
+    instructions:"Marinate and simmer until tender.",
+    nutrition:"320 kcal"
+  },
+  {
+    id:2,
+    name:"Sinigang na Baboy",
+    category:"Filipino",
+    image:"https://source.unsplash.com/300x200/?soup",
+    ingredients:["Pork","Tamarind","Vegetables"],
+    instructions:"Boil pork and add sour base.",
+    nutrition:"280 kcal"
+  },
+  {
+    id:3,
+    name:"Spaghetti Bolognese",
+    category:"International",
+    image:"https://source.unsplash.com/300x200/?spaghetti",
+    ingredients:["Pasta","Beef","Tomato sauce"],
+    instructions:"Cook pasta and mix with sauce.",
+    nutrition:"400 kcal"
+  },
+  {
+    id:4,
+    name:"Leche Flan",
+    category:"Dessert",
+    image:"https://source.unsplash.com/300x200/?dessert",
+    ingredients:["Eggs","Milk","Sugar"],
+    instructions:"Steam until set.",
+    nutrition:"250 kcal"
+  }
 ];
 
 /* =========================
-   STORAGE SYSTEMS
+   STORAGE
 ========================= */
 let favorites = JSON.parse(localStorage.getItem("fav")) || [];
-let meals = JSON.parse(localStorage.getItem("meals")) || [];
-let shop = JSON.parse(localStorage.getItem("shop")) || [];
+let current = null;
 
 /* =========================
-   RENDER RECIPES
+   RENDER SYSTEM
 ========================= */
 function renderRecipes(list = recipes){
-  let grid = document.getElementById("grid");
-  grid.innerHTML = "";
+  let home = document.getElementById("home");
+  home.innerHTML = "";
 
-  list.forEach(r => {
-    grid.innerHTML += `
+  list.forEach(r=>{
+    home.innerHTML += `
       <div class="card" onclick="openRecipe(${r.id})">
         <img src="${r.image}">
         <p>${r.name}</p>
+        <small>${r.category}</small>
       </div>
     `;
   });
@@ -198,34 +235,41 @@ renderRecipes();
    OPEN RECIPE
 ========================= */
 function openRecipe(id){
-  let r = recipes.find(x => x.id === id);
+  let r = recipes.find(x=>x.id===id);
+  current = r;
 
-  document.getElementById("grid").style.display = "none";
-  document.getElementById("detail").style.display = "block";
+  document.getElementById("home").style.display="none";
+  document.getElementById("detail").style.display="block";
 
-  document.getElementById("title").innerText = r.name;
-  document.getElementById("ingredients").innerText = r.ingredients;
-  document.getElementById("instructions").innerText = r.instructions;
-  document.getElementById("nutrition").innerText = r.nutrition;
-  document.getElementById("img").src = r.image;
+  document.getElementById("title").innerText=r.name;
+  document.getElementById("img").src=r.image;
 
-  window.current = r;
+  document.getElementById("ingredients").innerHTML =
+    r.ingredients.map(i=>"• "+i).join("<br>");
+
+  document.getElementById("instructions").innerText=r.instructions;
+  document.getElementById("nutrition").innerText=r.nutrition;
 }
 
 /* =========================
    BACK
 ========================= */
-function goBack(){
-  document.getElementById("grid").style.display = "grid";
-  document.getElementById("detail").style.display = "none";
+function back(){
+  document.getElementById("home").style.display="grid";
+  document.getElementById("detail").style.display="none";
 }
 
 /* =========================
    SEARCH FILTER
 ========================= */
 function searchRecipe(){
-  let input = document.getElementById("search").value.toLowerCase();
-  let filtered = recipes.filter(r => r.name.toLowerCase().includes(input));
+  let v = document.getElementById("search").value.toLowerCase();
+
+  let filtered = recipes.filter(r =>
+    r.name.toLowerCase().includes(v) ||
+    r.category.toLowerCase().includes(v)
+  );
+
   renderRecipes(filtered);
 }
 
@@ -233,9 +277,27 @@ function searchRecipe(){
    FAVORITES SYSTEM
 ========================= */
 function addFav(){
-  favorites.push(window.current);
+  favorites.push(current);
   localStorage.setItem("fav", JSON.stringify(favorites));
   alert("Added to Favorites ❤️");
+}
+
+/* =========================
+   FAVORITES VIEW
+========================= */
+function showFav(){
+  let home = document.getElementById("home");
+  home.innerHTML = "";
+
+  favorites.forEach(r=>{
+    home.innerHTML += `
+      <div class="card">
+        <img src="${r.image}">
+        <p>${r.name}</p>
+        <small>${r.category}</small>
+      </div>
+    `;
+  });
 }
 
 /* =========================
@@ -243,27 +305,9 @@ function addFav(){
 ========================= */
 function toggleMenu(){
   let s = document.getElementById("sidebar");
-  s.style.left = (s.style.left === "0px") ? "-220px" : "0px";
+  s.style.left = (s.style.left==="0px") ? "-240px" : "0px";
 }
 
-/* =========================
-   SIDEBAR FEATURES (BASIC DEMO)
-========================= */
-function showAll(){
-  renderRecipes();
-}
-
-function showFavs(){
-  renderRecipes(favorites);
-}
-
-function showPlanner(){
-  alert("Meal Planner feature (can be expanded)");
-}
-
-function showShop(){
-  alert("Shopping List feature (can be expanded)");
-}
 </script>
 
 </body>
