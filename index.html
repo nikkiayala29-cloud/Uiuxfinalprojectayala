@@ -1,18 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RecipeHub</title>
 
 <style>
 body {
   margin: 0;
-  font-family: Arial;
+  font-family: Arial, sans-serif;
   background: #fff7f0;
 }
 
 /* HEADER */
 header {
-  background: orange;
+  background: #ff6b00;
   color: white;
   padding: 15px;
   text-align: center;
@@ -27,9 +29,10 @@ header {
 
 .search input {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   border-radius: 10px;
   border: none;
+  background: #f1f1f1;
 }
 
 /* GRID */
@@ -40,6 +43,7 @@ header {
   padding: 10px;
 }
 
+/* CARD */
 .card {
   background: white;
   border-radius: 12px;
@@ -50,7 +54,7 @@ header {
 
 .card img {
   width: 100%;
-  height: 100px;
+  height: 110px;
   object-fit: cover;
 }
 
@@ -59,7 +63,7 @@ header {
   font-weight: bold;
 }
 
-/* DETAIL PAGE */
+/* DETAIL VIEW */
 .detail {
   display: none;
   padding: 15px;
@@ -72,7 +76,7 @@ header {
 
 /* BUTTON */
 button {
-  background: orange;
+  background: #ff6b00;
   border: none;
   padding: 10px;
   color: white;
@@ -80,7 +84,6 @@ button {
   margin-top: 10px;
 }
 </style>
-
 </head>
 
 <body>
@@ -94,33 +97,10 @@ button {
 <!-- GRID -->
 <div class="grid" id="grid"></div>
 
-  <div class="card" onclick="openRecipe('adobo')">
-    <img src="https://source.unsplash.com/300x200/?chicken">
-    <p>Chicken Adobo</p>
-  </div>
-
-  <div class="card" onclick="openRecipe('sinigang')">
-    <img src="https://source.unsplash.com/300x200/?soup">
-    <p>Sinigang</p>
-  </div>
-
-  <div class="card" onclick="openRecipe('pancit')">
-    <img src="https://source.unsplash.com/300x200/?noodles">
-    <p>Pancit Bihon</p>
-  </div>
-
-  <div class="card" onclick="openRecipe('leche')">
-    <img src="https://source.unsplash.com/300x200/?dessert">
-    <p>Leche Flan</p>
-  </div>
-
-</div>
-
-<!-- DETAIL VIEW -->
+<!-- DETAIL -->
 <div class="detail" id="detail">
 
   <img id="img">
-
   <h2 id="title"></h2>
 
   <h3>Ingredients</h3>
@@ -138,11 +118,48 @@ button {
 
 <script>
 
-function renderRecipes() {
+/* RECIPES DATABASE (SCALES TO 100+) */
+const recipes = [
+  {
+    id: 1,
+    name: "Chicken Adobo",
+    image: "https://source.unsplash.com/300x200/?chicken",
+    ingredients: "Chicken, soy sauce, vinegar, garlic, bay leaf",
+    instructions: "Marinate chicken, simmer until tender and sauce thickens.",
+    nutrition: "320 kcal"
+  },
+  {
+    id: 2,
+    name: "Sinigang na Baboy",
+    image: "https://source.unsplash.com/300x200/?soup",
+    ingredients: "Pork, tamarind, vegetables",
+    instructions: "Boil pork then add sour base and vegetables.",
+    nutrition: "280 kcal"
+  },
+  {
+    id: 3,
+    name: "Pancit Bihon",
+    image: "https://source.unsplash.com/300x200/?noodles",
+    ingredients: "Rice noodles, chicken, vegetables",
+    instructions: "Stir-fry noodles with meat and vegetables.",
+    nutrition: "300 kcal"
+  },
+  {
+    id: 4,
+    name: "Leche Flan",
+    image: "https://source.unsplash.com/300x200/?dessert",
+    ingredients: "Eggs, milk, sugar, vanilla",
+    instructions: "Steam mixture until set and caramelized.",
+    nutrition: "250 kcal"
+  }
+];
+
+/* RENDER RECIPES */
+function renderRecipes(list = recipes) {
   let grid = document.getElementById("grid");
   grid.innerHTML = "";
 
-  recipes.forEach(r => {
+  list.forEach(r => {
     grid.innerHTML += `
       <div class="card" onclick="openRecipe(${r.id})">
         <img src="${r.image}">
@@ -151,9 +168,9 @@ function renderRecipes() {
     `;
   });
 }
-
 renderRecipes();
 
+/* OPEN RECIPE */
 function openRecipe(id){
   let r = recipes.find(x => x.id === id);
 
@@ -167,26 +184,24 @@ function openRecipe(id){
   document.getElementById("img").src = r.image;
 }
 
+/* BACK BUTTON */
 function goBack(){
   document.getElementById("grid").style.display = "grid";
   document.getElementById("detail").style.display = "none";
+}
+
+/* SEARCH FILTER */
+function searchRecipe(){
+  let input = document.getElementById("search").value.toLowerCase();
+
+  let filtered = recipes.filter(r =>
+    r.name.toLowerCase().includes(input)
+  );
+
+  renderRecipes(filtered);
 }
 
 </script>
 
 </body>
 </html>
-function searchRecipe() {
-  let input = document.getElementById("search").value.toLowerCase();
-  let cards = document.getElementsByClassName("card");
-
-  for (let i = 0; i < cards.length; i++) {
-    let text = cards[i].innerText.toLowerCase();
-
-    if (text.includes(input)) {
-      cards[i].style.display = "block";
-    } else {
-      cards[i].style.display = "none";
-    }
-  }
-}
