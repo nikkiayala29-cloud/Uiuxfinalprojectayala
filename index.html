@@ -8,7 +8,7 @@
 <style>
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: Arial;
   background: #fff7f0;
 }
 
@@ -20,6 +20,36 @@ header {
   text-align: center;
   font-size: 20px;
   font-weight: bold;
+  position: relative;
+}
+
+/* HAMBURGER */
+.menu-btn {
+  position: absolute;
+  left: 15px;
+  top: 15px;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+/* SIDEBAR MENU */
+.sidebar {
+  position: fixed;
+  left: -220px;
+  top: 0;
+  width: 200px;
+  height: 100%;
+  background: white;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+  padding: 15px;
+  transition: 0.3s;
+}
+
+.sidebar a {
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+  color: #333;
 }
 
 /* SEARCH */
@@ -43,7 +73,6 @@ header {
   padding: 10px;
 }
 
-/* CARD */
 .card {
   background: white;
   border-radius: 12px;
@@ -63,7 +92,7 @@ header {
   font-weight: bold;
 }
 
-/* DETAIL VIEW */
+/* DETAIL */
 .detail {
   display: none;
   padding: 15px;
@@ -88,8 +117,20 @@ button {
 
 <body>
 
-<header>🍽 RecipeHub</header>
+<header>
+  <span class="menu-btn" onclick="toggleMenu()">☰</span>
+  🍽 RecipeHub
+</header>
 
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+  <a href="#" onclick="showAll()">🏠 Home</a>
+  <a href="#" onclick="showFavs()">❤️ Favorites</a>
+  <a href="#" onclick="showPlanner()">📅 Meal Planner</a>
+  <a href="#" onclick="showShop()">🛒 Shopping List</a>
+</div>
+
+<!-- SEARCH -->
 <div class="search">
   <input id="search" onkeyup="searchRecipe()" placeholder="Search recipes...">
 </div>
@@ -112,50 +153,33 @@ button {
   <h3>Nutrition</h3>
   <p id="nutrition"></p>
 
+  <button onclick="addFav()">❤️ Add to Favorites</button>
   <button onclick="goBack()">⬅ Back</button>
-
 </div>
 
 <script>
 
-/* RECIPES DATABASE (SCALES TO 100+) */
+/* =========================
+   DATABASE (EXPANDABLE TO 100+)
+========================= */
 const recipes = [
-  {
-    id: 1,
-    name: "Chicken Adobo",
-    image: "https://source.unsplash.com/300x200/?chicken",
-    ingredients: "Chicken, soy sauce, vinegar, garlic, bay leaf",
-    instructions: "Marinate chicken, simmer until tender and sauce thickens.",
-    nutrition: "320 kcal"
-  },
-  {
-    id: 2,
-    name: "Sinigang na Baboy",
-    image: "https://source.unsplash.com/300x200/?soup",
-    ingredients: "Pork, tamarind, vegetables",
-    instructions: "Boil pork then add sour base and vegetables.",
-    nutrition: "280 kcal"
-  },
-  {
-    id: 3,
-    name: "Pancit Bihon",
-    image: "https://source.unsplash.com/300x200/?noodles",
-    ingredients: "Rice noodles, chicken, vegetables",
-    instructions: "Stir-fry noodles with meat and vegetables.",
-    nutrition: "300 kcal"
-  },
-  {
-    id: 4,
-    name: "Leche Flan",
-    image: "https://source.unsplash.com/300x200/?dessert",
-    ingredients: "Eggs, milk, sugar, vanilla",
-    instructions: "Steam mixture until set and caramelized.",
-    nutrition: "250 kcal"
-  }
+  {id:1,name:"Chicken Adobo",image:"https://source.unsplash.com/300x200/?chicken",ingredients:"Chicken, soy sauce, vinegar, garlic",instructions:"Simmer until tender.",nutrition:"320 kcal"},
+  {id:2,name:"Sinigang na Baboy",image:"https://source.unsplash.com/300x200/?soup",ingredients:"Pork, tamarind, vegetables",instructions:"Boil pork, add sour base.",nutrition:"280 kcal"},
+  {id:3,name:"Pancit Bihon",image:"https://source.unsplash.com/300x200/?noodles",ingredients:"Noodles, chicken, vegetables",instructions:"Stir fry ingredients.",nutrition:"300 kcal"},
+  {id:4,name:"Leche Flan",image:"https://source.unsplash.com/300x200/?dessert",ingredients:"Eggs, milk, sugar",instructions:"Steam until set.",nutrition:"250 kcal"}
 ];
 
-/* RENDER RECIPES */
-function renderRecipes(list = recipes) {
+/* =========================
+   STORAGE SYSTEMS
+========================= */
+let favorites = JSON.parse(localStorage.getItem("fav")) || [];
+let meals = JSON.parse(localStorage.getItem("meals")) || [];
+let shop = JSON.parse(localStorage.getItem("shop")) || [];
+
+/* =========================
+   RENDER RECIPES
+========================= */
+function renderRecipes(list = recipes){
   let grid = document.getElementById("grid");
   grid.innerHTML = "";
 
@@ -170,7 +194,9 @@ function renderRecipes(list = recipes) {
 }
 renderRecipes();
 
-/* OPEN RECIPE */
+/* =========================
+   OPEN RECIPE
+========================= */
 function openRecipe(id){
   let r = recipes.find(x => x.id === id);
 
@@ -182,25 +208,62 @@ function openRecipe(id){
   document.getElementById("instructions").innerText = r.instructions;
   document.getElementById("nutrition").innerText = r.nutrition;
   document.getElementById("img").src = r.image;
+
+  window.current = r;
 }
 
-/* BACK BUTTON */
+/* =========================
+   BACK
+========================= */
 function goBack(){
   document.getElementById("grid").style.display = "grid";
   document.getElementById("detail").style.display = "none";
 }
 
-/* SEARCH FILTER */
+/* =========================
+   SEARCH FILTER
+========================= */
 function searchRecipe(){
   let input = document.getElementById("search").value.toLowerCase();
-
-  let filtered = recipes.filter(r =>
-    r.name.toLowerCase().includes(input)
-  );
-
+  let filtered = recipes.filter(r => r.name.toLowerCase().includes(input));
   renderRecipes(filtered);
 }
 
+/* =========================
+   FAVORITES SYSTEM
+========================= */
+function addFav(){
+  favorites.push(window.current);
+  localStorage.setItem("fav", JSON.stringify(favorites));
+  alert("Added to Favorites ❤️");
+}
+
+/* =========================
+   MENU
+========================= */
+function toggleMenu(){
+  let s = document.getElementById("sidebar");
+  s.style.left = (s.style.left === "0px") ? "-220px" : "0px";
+}
+
+/* =========================
+   SIDEBAR FEATURES (BASIC DEMO)
+========================= */
+function showAll(){
+  renderRecipes();
+}
+
+function showFavs(){
+  renderRecipes(favorites);
+}
+
+function showPlanner(){
+  alert("Meal Planner feature (can be expanded)");
+}
+
+function showShop(){
+  alert("Shopping List feature (can be expanded)");
+}
 </script>
 
 </body>
