@@ -88,11 +88,11 @@ button {
 <header>🍽 RecipeHub</header>
 
 <div class="search">
-  <input placeholder="Search recipes...">
+  <input id="search" onkeyup="searchRecipe()" placeholder="Search recipes...">
 </div>
 
 <!-- GRID -->
-<div class="grid" id="grid">
+<div class="grid" id="grid"></div>
 
   <div class="card" onclick="openRecipe('adobo')">
     <img src="https://source.unsplash.com/300x200/?chicken">
@@ -138,46 +138,33 @@ button {
 
 <script>
 
-const recipes = {
-  adobo: {
-    title: "Chicken Adobo",
-    ingredients: "Chicken, soy sauce, vinegar, garlic",
-    instructions: "Marinate chicken, then simmer until tender.",
-    nutrition: "320 kcal",
-    img: "https://source.unsplash.com/300x200/?chicken"
-  },
-  sinigang: {
-    title: "Sinigang na Baboy",
-    ingredients: "Pork, tamarind, vegetables",
-    instructions: "Boil pork, add sour base, add vegetables.",
-    nutrition: "280 kcal",
-    img: "https://source.unsplash.com/300x200/?soup"
-  },
-  pancit: {
-    title: "Pancit Bihon",
-    ingredients: "Noodles, vegetables, chicken",
-    instructions: "Stir fry noodles with ingredients.",
-    nutrition: "300 kcal",
-    img: "https://source.unsplash.com/300x200/?noodles"
-  },
-  leche: {
-    title: "Leche Flan",
-    ingredients: "Eggs, milk, sugar",
-    instructions: "Steam until caramelized.",
-    nutrition: "250 kcal",
-    img: "https://source.unsplash.com/300x200/?dessert"
-  }
-};
+function renderRecipes() {
+  let grid = document.getElementById("grid");
+  grid.innerHTML = "";
+
+  recipes.forEach(r => {
+    grid.innerHTML += `
+      <div class="card" onclick="openRecipe(${r.id})">
+        <img src="${r.image}">
+        <p>${r.name}</p>
+      </div>
+    `;
+  });
+}
+
+renderRecipes();
 
 function openRecipe(id){
+  let r = recipes.find(x => x.id === id);
+
   document.getElementById("grid").style.display = "none";
   document.getElementById("detail").style.display = "block";
 
-  document.getElementById("title").innerText = recipes[id].title;
-  document.getElementById("ingredients").innerText = recipes[id].ingredients;
-  document.getElementById("instructions").innerText = recipes[id].instructions;
-  document.getElementById("nutrition").innerText = recipes[id].nutrition;
-  document.getElementById("img").src = recipes[id].img;
+  document.getElementById("title").innerText = r.name;
+  document.getElementById("ingredients").innerText = r.ingredients;
+  document.getElementById("instructions").innerText = r.instructions;
+  document.getElementById("nutrition").innerText = r.nutrition;
+  document.getElementById("img").src = r.image;
 }
 
 function goBack(){
@@ -189,3 +176,17 @@ function goBack(){
 
 </body>
 </html>
+function searchRecipe() {
+  let input = document.getElementById("search").value.toLowerCase();
+  let cards = document.getElementsByClassName("card");
+
+  for (let i = 0; i < cards.length; i++) {
+    let text = cards[i].innerText.toLowerCase();
+
+    if (text.includes(input)) {
+      cards[i].style.display = "block";
+    } else {
+      cards[i].style.display = "none";
+    }
+  }
+}
