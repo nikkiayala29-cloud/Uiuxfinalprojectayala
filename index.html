@@ -1,202 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RecipeHub</title>
+  <title>RecipeHub</title>
 
-<style>
-body {
-  margin: 0;
-  font-family: Arial;
-  background: #eef1f5;
-}
+  <style>
+    body {
+      font-family: Arial;
+      margin: 0;
+      background: #fff7f0;
+    }
 
-/* APP */
-.app {
-  max-width: 420px;
-  margin: auto;
-  background: white;
-  min-height: 100vh;
-}
+    header {
+      background: orange;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
 
-/* HEADER */
-header {
-  background: linear-gradient(135deg,#ff6b6b,#ff8e53);
-  color: white;
-  padding: 20px;
-  font-size: 20px;
-  font-weight: bold;
-}
-
-/* SEARCH */
-.search {
-  padding: 10px 15px;
-}
-.search input {
-  width: 100%;
-  padding: 12px;
-  border-radius: 12px;
-  border: none;
-  background: #f2f2f2;
-}
-
-/* GRID */
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  padding: 15px;
-}
-
-.card {
-  border-radius: 15px;
-  overflow: hidden;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-}
-
-.card img {
-  width: 100%;
-  height: 110px;
-  object-fit: cover;
-}
-
-.card p {
-  margin: 8px;
-  font-weight: bold;
-}
-
-/* DETAIL */
-.detail {
-  display: none;
-  padding: 15px;
-}
-
-.detail img {
-  width: 100%;
-  border-radius: 15px;
-}
-
-/* NAV */
-.nav {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  max-width: 420px;
-  margin: auto;
-  display: flex;
-  justify-content: space-around;
-  background: white;
-  padding: 10px;
-  border-top: 1px solid #ddd;
-}
-</style>
+    .card {
+      background: white;
+      margin: 10px;
+      padding: 10px;
+      border-radius: 10px;
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="app">
-
 <header>🍽 RecipeHub</header>
 
-<div class="search">
-  <input placeholder="Search recipes...">
+<div class="card">
+  Chicken Adobo
 </div>
 
-<!-- GRID -->
-<div class="grid">
-
-  <div class="card" onclick="openRecipe('adobo')">
-    <img src="https://source.unsplash.com/300x200/?chicken">
-    <p>Chicken Adobo</p>
-  </div>
-
-  <div class="card" onclick="openRecipe('sinigang')">
-    <img src="https://source.unsplash.com/300x200/?soup">
-    <p>Sinigang</p>
-  </div>
-
-  <div class="card" onclick="openRecipe('pancit')">
-    <img src="https://source.unsplash.com/300x200/?noodles">
-    <p>Pancit Bihon</p>
-  </div>
-
-  <div class="card" onclick="openRecipe('leche')">
-    <img src="https://source.unsplash.com/300x200/?dessert">
-    <p>Leche Flan</p>
-  </div>
-
+<div class="card">
+  Sinigang
 </div>
-
-<!-- DETAIL VIEW -->
-<div class="detail" id="detail">
-
-  <img id="img">
-
-  <h2 id="title"></h2>
-
-  <h3>Ingredients</h3>
-  <p id="ingredients"></p>
-
-  <h3>Instructions</h3>
-  <p id="instructions"></p>
-
-  <h3>Nutrition</h3>
-  <p id="nutrition"></p>
-
-  <button onclick="closeRecipe()">Back</button>
-</div>
-
-</div>
-
-<script>
-const recipes = {
-  adobo: {
-    title: "Chicken Adobo",
-    ingredients: "Chicken, soy sauce, vinegar, garlic, bay leaf",
-    instructions: "Marinate chicken, simmer until tender.",
-    nutrition: "Protein high, 320 kcal",
-    img: "https://source.unsplash.com/300x200/?chicken"
-  },
-  sinigang: {
-    title: "Sinigang na Baboy",
-    ingredients: "Pork, tamarind, vegetables",
-    instructions: "Boil pork, add tamarind soup base.",
-    nutrition: "Balanced meal, 280 kcal",
-    img: "https://source.unsplash.com/300x200/?soup"
-  },
-  pancit: {
-    title: "Pancit Bihon",
-    ingredients: "Rice noodles, vegetables, chicken",
-    instructions: "Stir-fry noodles with ingredients.",
-    nutrition: "Carbs high, 300 kcal",
-    img: "https://source.unsplash.com/300x200/?noodles"
-  },
-  leche: {
-    title: "Leche Flan",
-    ingredients: "Eggs, milk, sugar",
-    instructions: "Steam custard mixture.",
-    nutrition: "Sweet dessert, 250 kcal",
-    img: "https://source.unsplash.com/300x200/?dessert"
-  }
-};
-
-function openRecipe(id){
-  document.getElementById("detail").style.display = "block";
-  document.querySelector(".grid").style.display = "none";
-
-  document.getElementById("title").innerText = recipes[id].title;
-  document.getElementById("ingredients").innerText = recipes[id].ingredients;
-  document.getElementById("instructions").innerText = recipes[id].instructions;
-  document.getElementById("nutrition").innerText = recipes[id].nutrition;
-  document.getElementById("img").src = recipes[id].img;
-}
-
-function closeRecipe(){
-  document.getElementById("detail").style.display = "none";
-  document.querySelector(".grid").style.display = "grid";
-}
-</script>
 
 </body>
 </html>
